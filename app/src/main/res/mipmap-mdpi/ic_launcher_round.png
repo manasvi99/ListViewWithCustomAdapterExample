@@ -1,0 +1,161 @@
+datatypes w = "http://whattf.org/datatype-draft"
+
+# #####################################################################
+##  RELAX NG Schema for HTML 5: Web Forms 2.0 markup                  #
+# #####################################################################
+
+## Shared attributes for form controls
+
+	common-form.attrs &=
+		( common-form.attrs.form? )
+
+	common-form.attrs.form |= 
+		attribute form {
+			common.data.idref
+		}
+
+	shared-form.attrs.formaction =
+		attribute formaction {
+			common.data.uri.non-empty
+		}
+
+	shared-form.attrs.formenctype =
+		attribute formenctype {
+			shared-form.attrs.formenctype.data
+		}
+		shared-form.attrs.formenctype.data = 
+			(	w:string "application/x-www-form-urlencoded" 
+			|	w:string "multipart/form-data"
+			|	w:string "text/plain"
+			)
+
+	shared-form.attrs.formmethod =
+		attribute formmethod {
+			shared-form.attrs.formmethod.data
+		}
+		shared-form.attrs.formmethod.data = 
+			( w:string "get"
+			| w:string "post"
+			)
+
+	shared-form.attrs.formtarget = 
+		attribute formtarget {
+			common.data.browsing-context-or-keyword
+		}
+
+	shared-form.attrs.formnovalidate = 
+		attribute formnovalidate {
+			w:string "formnovalidate" | w:string ""
+		}
+
+	shared-form.attrs.autofocus = 
+		attribute autofocus {
+			w:string "autofocus" | w:string ""
+		}
+	
+	shared-form.attrs.pattern = 
+		attribute pattern {
+			form.data.pattern
+		}
+
+	shared-form.attrs.template = 
+		attribute template {
+			common.data.idref
+		}
+
+	shared-form.attrs.required = 
+		attribute required {
+			w:string "required" | w:string ""
+		}
+
+	shared-form.attrs.placeholder = 
+		attribute placeholder {
+			form.data.stringwithoutlinebreaks
+		}
+
+	shared-form.attrs.dirname = 
+		attribute dirname {
+			form.data.nonemptystring
+		}
+
+	shared-form.attrs.inputmode =
+		attribute inputmode {
+			string
+		}
+
+	shared-form.attrs.minlength =
+		attribute minlength {
+			common.data.integer.non-negative
+		}
+
+## Shared attributes for <input>
+		
+	shared-input.attrs =
+		(	input.attrs.autocomplete?
+		&	shared-form.attrs.autofocus?
+		&	input.attrs.list?
+		&	shared-form.attrs.maxlength?
+		&	shared-form.attrs.minlength?
+		&	shared-form.attrs.pattern?
+		&	shared-form.attrs.placeholder?
+		&	shared-form.attrs.readonly?
+		&	shared-form.attrs.required?
+		&	shared-form.attrs.size?
+		)
+
+	input.attrs.list = 
+		attribute list {
+			common.data.idref
+		}
+	
+	input.attrs.step.float = 
+		attribute step {
+			w:string "any" | common.data.float.positive
+		}
+	
+	input.attrs.step.integer = 
+		attribute step {
+			w:string "any" | common.data.integer.positive 
+		}
+	
+	input.attrs.multiple = 
+		attribute multiple {
+			w:string "multiple" | w:string ""
+		}
+
+## autocomplete
+
+	input.attrs.autocomplete.any =
+		attribute autocomplete {
+			(	w:string "on" | w:string "off"
+			|	common.data.autocomplete.any
+			)
+		}
+
+	input.attrs.autocomplete =
+		attribute autocomplete {
+			string
+		}
+
+## Hidden String: <input type='hidden'>, Extensions
+
+	input.hidden.attrs &=
+		input.attrs.autocomplete?
+
+## Text Field: <input type='text'>, Extensions
+
+	input.text.attrs &=
+		(	input.attrs.autocomplete?
+		&	shared-form.attrs.autofocus?
+		&	shared-form.attrs.dirname?
+		&	input.attrs.list?
+		&	shared-form.attrs.pattern?
+		&	shared-form.attrs.required?
+		&	shared-form.attrs.placeholder?
+		&	shared-form.attrs.inputmode?
+		&	shared-form.attrs.minlength?
+		)
+
+## Password Field: <input type='password'>, Extensions
+
+	input.password.att
